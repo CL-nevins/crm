@@ -1,6 +1,5 @@
 /**
- * Created by PanJiaChen on 16/11/18.
- * 
+ * 表单验证的规则写在这里面
  */
 
 /**
@@ -12,12 +11,11 @@
 }
 
 /**
- * 用户名检查
+ * 登录时，用户名不能为空
  * @param str
  * @returns {Error}
  */
-// 用户名非空检查
-export function validUsername(str) {
+export function validLoginUsername(str) {
   const name = str.trim()
   if (name.length < 1) {
     return new Error('用户名不能为空！')
@@ -27,20 +25,23 @@ export function validUsername(str) {
 }
 
 /**
- * 密码非空检查
+ * 登录时，密码不能为空
  * @param str
  * @returns {Error}
  */
-// 密码非空检查
-export function validPwd(str) {
+export function validLoginPwd(str) {
   const pwd = str.trim()
   if (pwd.length < 1) {
     return new Error('密码不能为空！')
   }
 }
 
-// 验证码位数校验
-export function validCode(str) {
+/**
+ * 登录时，验证码表单验证；不能为空，切位数限定为5
+ * @param {*} str 
+ * @returns 
+ */
+export function validVerifyCode(str) {
   const code = str.trim()
   if (code.length < 1) {
     return new Error('验证码不能为空！')

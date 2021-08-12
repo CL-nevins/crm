@@ -1,6 +1,4 @@
-// 可能要admin换一下
 import { login, logout, getInfo } from '@/api/admin'
-// 三个request的引入
 import { getToken, setToken, removeToken, getGuid, setGuid, removeGuid } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -8,6 +6,7 @@ const getDefaultState = () => {
   return {
     guid: getGuid(),
     token: getToken(),
+    nick_name: '',
     name: '',
     avatar: ''
   }
@@ -30,6 +29,9 @@ const mutations = {
   },
   SET_AVATAR: (state, avatar) => {
     state.avatar = avatar
+  },
+  SET_NICKNAME: (state, nick_name) => {
+    state.nick_name = nick_name
   }
 }
 
@@ -38,10 +40,10 @@ const actions = {
   login({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
       login({
-        admin_name: userInfo.username.trim(),
+        username: userInfo.username.trim(),
         password: userInfo.password,
         captcha: userInfo.verifycode,
-        captchaNum: userInfo.number
+        number: userInfo.number
          }).then(response => {
         const{ data } = response
         // tah得到response
@@ -51,6 +53,8 @@ const actions = {
         // tah将返回来的token和guid写入Cookie中
         setToken(data.token)
         setGuid(data.guid)
+        console.log('token',data.token)
+        console.log('guid',data.guid)
         resolve()
       }).catch(error => {
         reject(error)
@@ -61,13 +65,18 @@ const actions = {
   // get admin info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
+      // 这里param传个空对象过去
       getInfo({}).then(response => {
         const { data } = response
         if (!data) {
           return reject('验证失败，请重新登录。')
         }
-        const { name, avatar } = data
-        commit('SET_NAME', name)
+        // 拿到后端data数据后，赋值
+        // 只赋值nick_name ; avatar
+        // 后端返回的avatar现在是"---""
+        data.avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+        const { nick_name, avatar} = data
+        commit('SET_NICKNAME', nick_name)
         commit('SET_AVATAR', avatar)
         resolve(data)
       }).catch(error => {
@@ -79,6 +88,7 @@ const actions = {
   // admin logout
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
+      // logout要传什么业务参数
       logout({
         guid: state.guid,
         token: state.token

@@ -1,4 +1,7 @@
-// 管理员相关的接口写在这里面
+/**
+ * 管理员相关的接口写在这里
+ * signEngrypt是签名加密
+ */
 import request from '@/utils/request'
 import { signEncrypt } from '@/utils/signEncrypt'
 
@@ -8,8 +11,7 @@ import { signEncrypt } from '@/utils/signEncrypt'
  * @returns {AxiosPromise}
  */
 export function login(data) {
-  const path = '/admin/login'
-  // data.path = path
+  const path = '/api/admin/login'
   data = signEncrypt(path, data)
   return request({
     url: path,
@@ -25,7 +27,7 @@ export function login(data) {
  * @returns {AxiosPromise}
  */
 export function getInfo(data) {
-  const path = '/admin/info'
+  const path = '/api/admin/info'
   data = signEncrypt(path, data)
   return request({
     url: path,
@@ -40,7 +42,7 @@ export function getInfo(data) {
  * @returns {AxiosPromise}
  */
 export function logout(data) {
-  const path = '/admin/logout'
+  const path = '/api/admin/logout'
   data = signEncrypt(path, data)
   return request({
     url: path,
@@ -49,15 +51,13 @@ export function logout(data) {
   })
 }
 
-// 只写接口；请求成功之后的处理不在这里；
-
 /**
- * 管理员列表拉取queryAdmin
+ * 管理员列表拉取; admin list
  * 打开管理员列表界面时，传递的业务参数param全为空，此时后端返回所有条目
  * 针对某个条件查询条目时，对应的param项赋值，后端比对后，返回符合条件的条目
  */
-export function queryAdmin(data) {
-  const path = '/admin/query'
+export function adminList(data) {
+  const path = '/api/admin/list'
   data = signEncrypt(path, data)
   return request(
     {
@@ -69,11 +69,11 @@ export function queryAdmin(data) {
 }
 
 /**
- * 增加管理员addAdmin
- *
+ * 新增管理员账号
+ * 
  */
-export function addAdmin(data) {
-  const path = '/admin/add'
+export function adminAdd(data) {
+  const path = '/api/admin/add'
   data = signEncrypt(path, data)
   return request(
     {
@@ -85,10 +85,10 @@ export function addAdmin(data) {
 }
 
 /**
- * 删除管理员deleteAdmin
+ * 编辑管理员信息
  */
-export function deleteAdmin(data) {
-  const path = '/admin/delete'
+export function adminUpdate(data) {
+  const path = '/api/admin/update'
   data = signEncrypt(path, data)
   return request(
     {
@@ -100,10 +100,25 @@ export function deleteAdmin(data) {
 }
 
 /**
- * 修改管理员信息updateAdmin
+ * 修改管理员密码
  */
-export function updateAdmin(data) {
-  const path = '/admin/update'
+export function adminUpdatePwd(data) {
+  const path = '/api/admin/update/pwd'
+  data = signEncrypt(path, data)
+  return request(
+    {
+      url: path,
+      method: 'post',
+      data
+    }
+  )
+}
+
+/**
+ * 修改管理员状态
+ */
+export function adminUpdateStatus(data) {
+  const path = '/api/admin/update/status'
   data = signEncrypt(path, data)
   return request(
     {
