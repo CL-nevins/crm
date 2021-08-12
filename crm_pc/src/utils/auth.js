@@ -1,5 +1,5 @@
 /**
- * auth.js 
+ * auth.js
  * 引入了js-cookie
  * cookie, guid, token的相关操作
  */
@@ -11,50 +11,50 @@ const TokenKey = 'admin_token'
 const GuidKey = 'admin_guid'
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export function getToken() {
   return Cookies.get(TokenKey)
 }
 
 /**
- * 
- * @param {*} token 
- * @returns 
+ *
+ * @param {*} token
+ * @returns
  */
 export function setToken(token) {
   return Cookies.set(TokenKey, token)
 }
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export function removeToken() {
   return Cookies.remove(TokenKey)
 }
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export function getGuid() {
   return Cookies.get(GuidKey)
 }
 
 /**
- * 
- * @param {*} guid 
- * @returns 
+ *
+ * @param {*} guid
+ * @returns
  */
 export function setGuid(guid) {
   return Cookies.set(GuidKey, guid)
 }
 
 /**
- * 
- * @returns 
+ *
+ * @returns
  */
 export function removeGuid() {
   return Cookies.remove(GuidKey)

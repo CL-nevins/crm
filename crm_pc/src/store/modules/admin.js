@@ -36,25 +36,20 @@ const mutations = {
 }
 
 const actions = {
-  // admin login
+  // 管理员登录
   login({ commit }, userInfo) {
-      return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       login({
         username: userInfo.username.trim(),
         password: userInfo.password,
         captcha: userInfo.verifycode,
         number: userInfo.number
-         }).then(response => {
-        const{ data } = response
-        // tah得到response
-        // tah将返回来的token和guid 更新为当前两参数的状态
+      }).then(response => {
+        const { data } = response
         commit('SET_TOKEN', data.token)
         commit('SET_GUID', data.guid)
-        // tah将返回来的token和guid写入Cookie中
         setToken(data.token)
         setGuid(data.guid)
-        console.log('token',data.token)
-        console.log('guid',data.guid)
         resolve()
       }).catch(error => {
         reject(error)
@@ -62,8 +57,8 @@ const actions = {
     })
   },
 
-  // get admin info
-  getInfo({ commit, state }) {
+  // 获取管理员信息
+  getInfo({ commit }) {
     return new Promise((resolve, reject) => {
       // 这里param传个空对象过去
       getInfo({}).then(response => {
@@ -75,7 +70,7 @@ const actions = {
         // 只赋值nick_name ; avatar
         // 后端返回的avatar现在是"---""
         data.avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
-        const { nick_name, avatar} = data
+        const { nick_name, avatar } = data
         commit('SET_NICKNAME', nick_name)
         commit('SET_AVATAR', avatar)
         resolve(data)

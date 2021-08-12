@@ -6,7 +6,7 @@
  * @param {string} path
  * @returns {Boolean}
  */
- export function isExternal(path) {
+export function isExternal(path) {
   return /^(https?:|mailto:|tel:)/.test(path)
 }
 
@@ -38,8 +38,8 @@ export function validLoginPwd(str) {
 
 /**
  * 登录时，验证码表单验证；不能为空，切位数限定为5
- * @param {*} str 
- * @returns 
+ * @param {*} str
+ * @returns
  */
 export function validVerifyCode(str) {
   const code = str.trim()

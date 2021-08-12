@@ -51,12 +51,12 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: '首页', icon: 'dashboard'}
+      meta: { title: '首页', icon: 'dashboard' }
     }]
   },
-  //尝试自己重新挂个界面上来
+  // 尝试自己重新挂个界面上来
   {
-    path:'/admin',
+    path: '/admin',
     component: Layout,
     // redirect: noRedirect,
     redirect: '/adminManage',
@@ -64,7 +64,7 @@ export const constantRoutes = [
       path: 'adminManage',
       name: 'adminManage',
       component: () => import('@/views/admin/adminManage'),
-      meta: { title: '管理员管理', icon: 'dashboard'}
+      meta: { title: '管理员管理', icon: 'dashboard' }
     }]
   },
   {
@@ -84,7 +84,7 @@ export const constantRoutes = [
         path: 'customerAdd',
         name: 'customerAdd',
         component: () => import('@/views/customer/customerAdd'),
-        meta: { title: '添加客户'}
+        meta: { title: '添加客户' }
       }
     ]
   },

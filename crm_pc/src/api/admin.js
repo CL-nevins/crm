@@ -70,7 +70,7 @@ export function adminList(data) {
 
 /**
  * 新增管理员账号
- * 
+ *
  */
 export function adminAdd(data) {
   const path = '/api/admin/add'
