@@ -50,7 +50,8 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-button @click="test()">test</el-button>
+    <!-- 测试按钮 -->
+    <!-- <el-button @click="test()">test</el-button> -->
 
     <!-- 分页 -->
     <div class="block">
@@ -159,15 +160,16 @@ export default {
   data() {
     // 密码校验
     var validatePass = (rule, value, callback) => {
-      let reg= /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/
-        if (!reg.test(value)) {
-            callback(new Error('密码需以字母开头'));
-        } else {
-          if (this.changePwdForm.checkPassword !== '') {
-              this.$refs.changePwdForm.validateField('checkPassword');
-          }
-          callback();
+      // let reg= /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/
+      let reg = /^[a-zA-Z]\w{5,10}$/
+      if (!reg.test(value)) {
+          callback(new Error('密码需以字母开头'));
+      } else {
+        if (this.changePwdForm.checkPassword !== '') {
+            this.$refs.changePwdForm.validateField('checkPassword');
         }
+        callback();
+      }
       };
       // 密码确认校验
     var validatePass2 = (rule, value, callback) => {
@@ -181,7 +183,7 @@ export default {
       };
       // 密码校验
     var validateAddPass = (rule, value, callback) => {
-      let reg= /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/
+      let reg = /^[a-zA-Z]\w{5,10}$/
         if (!reg.test(value)) {
             callback(new Error('密码需以字母开头'));
         } else {
@@ -308,7 +310,7 @@ export default {
     indexMethod(index) {
       return index + 1;
     },
-    // 13位的时间转成日期格式，列表日期列渲染
+    // 将后端返回的13位的时间转成日期格式，列表日期列渲染
     dateFormat(row,column) {
       let date = new Date(parseInt(row.add_time));
       let Y = date.getFullYear() + '-';
@@ -321,23 +323,27 @@ export default {
     },
     // 弹出禁用管理员消息框
     disableAdmin(index,row) {
-      this.$confirm('是否禁用此用户?', '提示', {
+      let Url = require("../../assets/alertIcon@2x.png");
+      this.$confirm("<img src=" + Url + "><p>是否禁用此用户？</p>", '提示', {
+          dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
-          iconClass: 'el-icon-message-solid'
         }).then(() => {
+          this.listLoading = true
           adminUpdateStatus(
             {
               admin_guid: row.guid,
               status: 2
             }
-          )
-          this.fetchData()
-          this.$message({
+          ).then(response => {
+            this.fetchData()
+            this.$message({
             type: 'warning',
             message: '已禁用'
-          });
+          })
+            this.listLoading = false
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -347,23 +353,27 @@ export default {
     },
     // 弹出启用管理员消息框
     enableAdmin(index,row) {
-      this.$confirm('是否启用此用户?', '提示', {
+      let Url = require("../../assets/alertIcon@2x.png");
+      this.$confirm("<img src=" + Url + "><p>是否启用此用户？</p>", '提示', {
+          dangerouslyUseHTMLString: true,
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
-          iconClass: 'el-icon-message-solid'
         }).then(() => {
+          this.listLoading = true
           adminUpdateStatus(
             {
               admin_guid: row.guid,
               status: 1
             }
-          )
-          this.fetchData()
-          this.$message({
-            type: 'warning',
+          ).then(response => {
+            this.fetchData()
+            this.$message({
+            type: 'success',
             message: '已启用'
-          });
+          })
+            this.listLoading = false
+          })
         }).catch(() => {
           this.$message({
             type: 'info',
@@ -389,9 +399,9 @@ export default {
       // 组合param里的where和searchDate
       // 并对它们进行json.stringify
       var where = {
-        nick_name: data.nick_name,
-        phone: data.phone,
-        user_name: data.user_name
+        nick_name: data.nick_name.trim(),
+        phone: data.phone.trim(),
+        user_name: data.user_name.trim()
       },
       where = JSON.stringify(where)
       var searchDate = {
@@ -399,7 +409,7 @@ export default {
         endDate: date2
       }
       searchDate = JSON.stringify(searchDate)
-      // 根据有无传值封装
+      // 根据日期区间控件，有无传值组合数据
       if(date1 === 0 || date2 === 0) {
         dataPass = {
           where: where
@@ -450,6 +460,7 @@ export default {
     submitPwd(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.listLoading = true
           this.$message({
             message: '校验通过，提交',
             type: 'success'
@@ -459,7 +470,9 @@ export default {
             password: this.changePwdForm.password
           }
           // 调用adminUpdatePwd函数
-          adminUpdatePwd(data)
+          adminUpdatePwd(data).then(response => {
+            this.listLoading = false
+          })
         } else {
           this.$message.error('校验失败，请检查输入');
           return false;
@@ -475,17 +488,21 @@ export default {
     submitUpdate(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.listLoading = true
           this.$message({
             message: '校验通过，提交',
             type: 'success'
           })
           let data = {
             admin_guid: this.updateAdminForm.guid,
-            nick_name: this.updateAdminForm.nick_name,
-            phone: this.updateAdminForm.phone
+            nick_name: this.updateAdminForm.nick_name.trim(),
+            phone: this.updateAdminForm.phone.trim()
           }
           // 调用adminUpdatePwd函数
-          adminUpdate(data)
+          adminUpdate(data).then(response => {
+            this.listLoading = false
+            this.fetchData()
+          })
         } else {
           this.$message.error('校验失败，请检查输入');
           return false;
@@ -496,19 +513,23 @@ export default {
     submitAdd(formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
+          this.listLoading = true
           this.$message({
             message: '校验通过，提交',
             type: 'success'
           })
           let data = {
-            user_name: this.addAdminForm.user_name,
-            password: this.addAdminForm.password,
-            nick_name: this.addAdminForm.nick_name,
-            phone: this.addAdminForm.phone,
+            user_name: this.addAdminForm.user_name.trim(),
+            password: this.addAdminForm.password.trim(),
+            nick_name: this.addAdminForm.nick_name.trim(),
+            phone: this.addAdminForm.phone.trim(),
             avatar: '---'
           }
           // 调用adminUpdatePwd函数
-          adminAdd(data)
+          adminAdd(data).then(response => {
+            this.listLoading = false
+            this.fetchData()
+          })
         } else {
           this.$message.error('校验失败，请检查输入');
           return false;
@@ -517,13 +538,12 @@ export default {
     },
     // 重置表单内容
     resetQuery(formName) {
-      this.$refs[formName].resetFields() //清除表单内填写的内容
+      this.$refs[formName].resetFields() 
     },
-    
-      // 测试函数，配合界面上的test按钮，调试
-      test() {
-            this.addAdminVisible = true
-          },
+    // 测试函数，配合界面上的test按钮，调试
+    test() {
+          this.addAdminVisible = true
+        },
   },
 };
 </script>
@@ -586,5 +606,17 @@ export default {
     width: 104px;
     height: 104px;
     display: block;
+  }
+  // 弹出框 message-box样式设定
+  .el-message-box__status.el-icon-warning {
+    display: none;
+  }
+  .el-message-box__message{
+    img {
+      width:21px;
+      height: 21px;
+      float:left;
+      margin-right: 10px;
+    }
   }
 </style>
