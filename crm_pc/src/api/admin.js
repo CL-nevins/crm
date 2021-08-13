@@ -121,7 +121,7 @@ export function adminUpdatePwd(data) {
  * 修改管理员状态
  */
 export function adminUpdateStatus(data) {
-  const path = '/api/admin/update/status'
+  const path = '/api/admin/status'
   data = signEncrypt(path, data)
   return request(
     {
