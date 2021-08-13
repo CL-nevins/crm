@@ -12,6 +12,9 @@ import { signEncrypt } from '@/utils/signEncrypt'
  */
 export function login(data) {
   const path = '/api/admin/login'
+  data.user_name = data.username
+  delete data.username
+  console.log(data)
   data = signEncrypt(path, data)
   return request({
     url: path,
