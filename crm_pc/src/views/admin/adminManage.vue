@@ -55,26 +55,26 @@
 
     <!-- 分页 -->
     <div class="block">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page = "page"
-      :page-sizes = "[10, 20, 30, 40]"
-      :page-size = "limit"
-      layout="total, slot, prev, pager, next, jumper"
-      :total="count">
-      <span style="color:#606266;">每页</span>
-        <el-select v-model="limit"  @change="handleSizeChange" size="mini">
-          <el-option
-            v-for="item in page_sizes"
-            :key="item"
-            :value="item"
-            >
-          </el-option>
-        </el-select>
-      <span style="color:#606266;">条</span>
-    </el-pagination>
-  </div>
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page = "page"
+        :page-sizes = "[10, 20, 30, 40]"
+        :page-size = "limit"
+        layout="total, slot, prev, pager, next, jumper"
+        :total="count">
+        <span style="color:#606266;">每页</span>
+          <el-select v-model="limit"  @change="handleSizeChange" size="mini">
+            <el-option
+              v-for="item in page_sizes"
+              :key="item"
+              :value="item"
+              >
+            </el-option>
+          </el-select>
+        <span style="color:#606266;">条</span>
+      </el-pagination>
+    </div>
 
 
   <!------------------- 模态框部分------------- -->
@@ -313,6 +313,7 @@ export default {
   },
   mounted() {
     this.fetchData()
+    this.fetchData()
   },
   methods: {
     // 列表索引值渲染
@@ -401,7 +402,8 @@ export default {
       }else{
       var data = this.adminSearch
       var date1 = this.adminSearch.searchDate[0]/1000
-      var date2 = this.adminSearch.searchDate[1]/1000}
+      var date2 = this.adminSearch.searchDate[1]/1000
+      }
       var dataPass = ''
       delete data.searchDate
       
@@ -435,8 +437,10 @@ export default {
         ...dataPass
       }).then(response => {
         // 获取到的列表值，在这里赋值
+        
         this.count = response.data.count
         this.list = response.data.data
+        console.log('初始化窗口 为啥不写数据')
         this.listLoading = false
       })
     },

@@ -90,19 +90,22 @@ export const constantRoutes = [
         path: 'addConsult/:guid',
         name: 'addConsult',
         component: () => import('@/views/customer/addConsult'),
-        meta: { title: '新增咨询' }
+        meta: { title: '新增咨询' },
+        hidden: true
       },
       {
         path: 'customerDetail/:guid',
         name: 'customerDetail',
         component: () => import('@/views/customer/customerDetail'),
-        meta: { title: '客户详情' }
+        meta: { title: '客户详情' },
+        hidden: true
       },
       {
         path: 'customerLink',
         name: 'customerLink',
         component: () => import('@/views/customer/addConsult'),
-        meta: { title: '客户联系人' }
+        meta: { title: '客户联系人' },
+        hidden: true
       }
     ]
   },

@@ -29,17 +29,17 @@
         </div>
         <!-- 列表显示区域 -->
         <el-table v-loading="listLoading" :data="list" element-loading-text="数据加载中" style="width: 100%" highlight-current-row>
-        <el-table-column prop="guid" label="ID" width="300"></el-table-column>
+        <el-table-column prop="guid" label="ID" width="400"></el-table-column>
         <el-table-column label="类型" width="150">
             <template scope="scope">
                 <span v-if="scope.row.type=== 2" >个人</span>
                 <span v-else >企业</span>
             </template>
         </el-table-column>
-        <el-table-column label="客户名称" width="180" prop="customer_name">
+        <el-table-column label="客户名称" width="220" prop="customer_name">
         </el-table-column>
-        <el-table-column  label="联系人姓名" width="200"></el-table-column>
-        <el-table-column  label="联系人电话" width="200"></el-table-column>
+        <el-table-column  label="联系人姓名" width="220" prop="name"></el-table-column>
+        <el-table-column  label="联系人电话" width="220" prop="phone"></el-table-column>
         <el-table-column prop="add_time" label="创建时间" :formatter="dateFormat" width="250"></el-table-column>
         <el-table-column label="操作"  width="400">
             <template slot-scope="scope">
