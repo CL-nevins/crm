@@ -23,7 +23,7 @@
       </el-form>
     </div>
     <!-- 数据展示区 调试区 -->
-    <!-- <p>日期值：{{ adminSearch.searchDate }} 数据总计: {{ count }}</p> -->
+    <!-- <p>日期值：{{ adminSearch.searchDate }} 数据总计: {{ limit }}</p> -->
 
     <!-- 列表显示区域 -->
     <el-table v-loading="listLoading" :data="list" element-loading-text="数据加载中" style="width: 100%" highlight-current-row>
@@ -61,8 +61,18 @@
       :current-page = "page"
       :page-sizes = "[10, 20, 30, 40]"
       :page-size = "limit"
-      layout="total, sizes, prev, pager, next, jumper"
+      layout="total, slot, prev, pager, next, jumper"
       :total="count">
+      <span style="color:#606266;">每页</span>
+        <el-select v-model="limit"  @change="handleSizeChange" size="mini">
+          <el-option
+            v-for="item in page_sizes"
+            :key="item"
+            :value="item"
+            >
+          </el-option>
+        </el-select>
+      <span style="color:#606266;">条</span>
     </el-pagination>
   </div>
 
@@ -160,7 +170,6 @@ export default {
   data() {
     // 密码校验
     var validatePass = (rule, value, callback) => {
-      // let reg= /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{4,20}$/
       let reg = /^[a-zA-Z]\w{5,10}$/
       if (!reg.test(value)) {
           callback(new Error('密码需以字母开头'));
@@ -229,7 +238,7 @@ export default {
       count: 13,
       page: 1,
       limit: 10,
-
+      page_sizes: [10,20,30,40],
 
       // 修改密码相关
       changePwdVisible: false,
@@ -312,7 +321,7 @@ export default {
     },
     // 将后端返回的13位的时间转成日期格式，列表日期列渲染
     dateFormat(row,column) {
-      let date = new Date(parseInt(row.add_time));
+      let date = new Date(parseInt(row.add_time)*1000);
       let Y = date.getFullYear() + '-';
       let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
       let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
@@ -391,8 +400,8 @@ export default {
         var data = this.adminSearch
       }else{
       var data = this.adminSearch
-      var date1 = this.adminSearch.searchDate[0]
-      var date2 = this.adminSearch.searchDate[1]}
+      var date1 = this.adminSearch.searchDate[0]/1000
+      var date2 = this.adminSearch.searchDate[1]/1000}
       var dataPass = ''
       delete data.searchDate
       
@@ -445,10 +454,6 @@ export default {
       console.log('page',this.page)
       this.fetchData()
       // this.sendPagination(val)
-    },
-    // 分页值发给后端
-    sendPagination(val){
-
     },
     // 把当前条目的值，传入修改密码dialog
     handlePwd(index, row) {
@@ -548,7 +553,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scope>
+<style lang="scss" scoped>
 .search-container{
   height: 46px;
   .layout_right {
@@ -583,6 +588,18 @@ export default {
 }
 .el-pagination{
   text-align: center;
+    .pageSizeSelect{
+      display: inline-block;
+      font-size: 14px;
+      color: #606266;
+      letter-spacing: 0;
+      // line-height: 26px;
+    &>>>.el-input--small .el-input__inner {
+      width:30px;
+
+  }
+    }
+  
 }
 .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
