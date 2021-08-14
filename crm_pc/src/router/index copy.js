@@ -78,31 +78,36 @@ export const constantRoutes = [
         path: 'customerList',
         name: 'customerList',
         component: () => import('@/views/customer/customerList'),
-        meta: { title: '客户列表' }
+        meta: { title: '客户列表' },
+        // 新增子节点
+        children: [
+          {
+            path: 'addConsult',
+            component: () => import('@/views/customer/addConsult'),
+            name: 'addConsult',
+            meta: { title: 'addConsult' }
+          },
+          {
+            path: 'customerDetail',
+            component: () => import('@/views/customer/customerDetail'),
+            name: 'customerDetail',
+            meta: { title: 'customerDetail' },
+            children: [
+              {
+                path: 'customerLink',
+                component: () => import('@/views/customer/customerLink'),
+                name: 'customerLink',
+                meta: { title: 'customerLink' }
+              }
+            ]
+          }
+        ]
       },
       {
         path: 'customerAdd',
         name: 'customerAdd',
         component: () => import('@/views/customer/customerAdd'),
         meta: { title: '添加客户' }
-      },
-      {
-        path: 'addConsult/:guid',
-        name: 'addConsult',
-        component: () => import('@/views/customer/addConsult'),
-        meta: { title: '新增咨询' }
-      },
-      {
-        path: 'customerDetail/:guid',
-        name: 'customerDetail',
-        component: () => import('@/views/customer/customerDetail'),
-        meta: { title: '客户详情' }
-      },
-      {
-        path: 'customerLink',
-        name: 'customerLink',
-        component: () => import('@/views/customer/addConsult'),
-        meta: { title: '客户联系人' }
       }
     ]
   },

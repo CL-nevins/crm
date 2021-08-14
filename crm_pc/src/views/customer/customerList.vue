@@ -43,10 +43,10 @@
         <el-table-column prop="add_time" label="创建时间" :formatter="dateFormat" width="250"></el-table-column>
         <el-table-column label="操作"  width="400">
             <template slot-scope="scope">
-            <el-button type="primary" @click="changePwdVisible = true; handlePwd(scope.$index, scope.row);" size="mini">新增咨询</el-button>
-            <el-button size="mini" @click="handleAdmin(scope.$index, scope.row);updateAdminVisible = true;" type="success">转发手机</el-button>
-            <el-button size="mini" @click="handleAdmin(scope.$index, scope.row);updateAdminVisible = true;">详情</el-button>
-            <el-button size="mini" @click="handleAdmin(scope.$index, scope.row);updateAdminVisible = true;">编辑</el-button>
+            <el-button @click="handleInfo(scope.row.guid)" size="mini" type="primary">新增咨询</el-button>
+            <el-button size="mini"  type="success">转发手机</el-button>
+            <el-button size="mini" @click="getDetail(scope.row.guid)">详情</el-button>
+            <el-button size="mini" >编辑</el-button>
             </template>
         </el-table-column>
         </el-table>
@@ -74,7 +74,7 @@
             <span style="color:#606266;">条</span>
             </el-pagination>
         </div>
-        <el-button @click="test()">test</el-button>
+        
     </div>
 
     
@@ -84,10 +84,6 @@
 import { customerList, customerAdd, logConsultAdd, customerDetail, linkDelete, customerUpdateLink,  customerLinkList} from '@/api/customer'
 export default {
     data() {
-        // 密码校验
-
-        // 确认密码校验
-
         return {
             customerType: [
                 {'label': '个人',
@@ -109,39 +105,6 @@ export default {
             page: 1,
             limit: 10,
             page_sizes: [10,20,30,40],
-
-            // 添加客户
-            // addCustomerVisible: false,
-            // addCustomerForm: {
-            //     user_name: '',
-            //     password: '',
-            //     checkPassword: '',
-            //     nick_name: '',
-            //     phone: ''
-            // },
-            // addCustomerRules: {
-            //     user_name: [
-            //     { required: true, message: '请输入昵称', trigger: 'blur' },
-            //     { min: 6, max: 20, message: '长度在 6 到 20 个字符', trigger: 'blur' },
-            //     ],
-            //     password: [
-            //     { required: true, message: '请输入密码', trigger: 'blur' },
-            //     { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' },
-            //     { validator: validateAddPass, trigger: 'blur' }
-            //     ],
-            //     checkPassword: [
-            //     { required: true, message: '请再次输入密码', trigger: 'blur' },
-            //     { min: 6, max: 10, message: '长度在 6 到 10 个字符', trigger: 'blur' },
-            //     { validator: validateAddPass2, trigger: 'blur'}
-            //     ],
-            //     nick_name: [
-            //     { required: true, message: '请输入昵称', trigger: 'blur' }
-            //     ],
-            //     phone: [
-            //     {required: true, message: '请输入电话号码', trigger: 'blur'},
-            //     {validator: validatePhone, trigger: 'blur'}
-            //     ]
-            // },
         }
     },
     mounted() {
@@ -199,9 +162,23 @@ export default {
         return Y + M + D + h + m + s;
         },
         // 测试函数
-        test() {
-          console.log(this.customerSearch)
+        test(guid) {
+            this.$router.push({
+            path: `/customer/addConsult/${guid}`,
+            })
         },
+        // 新增咨询，获取并传递客户的guid值，然后打开新界面
+        // 路由传值，这个好好记下笔记，把几个收藏的网页看看；请教团子
+        handleInfo(guid){
+            this.$router.push({
+            path: `/customer/addConsult/${guid}`,
+            })
+        },
+        getDetail(guid){
+            this.$router.push({
+            path: `/customer/customerDetail/${guid}`,
+            })
+        }
     }
 }
 </script>
